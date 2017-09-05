@@ -1,0 +1,14 @@
+C:\Users\Tygra\Desktop\Plugins\Starter\Starter\bin\Debug\Starter.dll
+C:\Users\Tygra\Desktop\Plugins\Starter\Starter\bin\Debug\Starter.pdb
+C:\Users\Tygra\Desktop\Plugins\Starter\Starter\bin\Debug\Mono.Data.Sqlite.dll
+C:\Users\Tygra\Desktop\Plugins\Starter\Starter\bin\Debug\MySql.Data.dll
+C:\Users\Tygra\Desktop\Plugins\Starter\Starter\bin\Debug\Newtonsoft.Json.dll
+C:\Users\Tygra\Desktop\Plugins\Starter\Starter\bin\Debug\OTAPI.dll
+C:\Users\Tygra\Desktop\Plugins\Starter\Starter\bin\Debug\TerrariaServer.exe
+C:\Users\Tygra\Desktop\Plugins\Starter\Starter\bin\Debug\TShockAPI.dll
+C:\Users\Tygra\Desktop\Plugins\Starter\Starter\bin\Debug\HttpServer.dll
+C:\Users\Tygra\Desktop\Plugins\Starter\Starter\bin\Debug\BCrypt.Net.dll
+C:\Users\Tygra\Desktop\Plugins\Starter\Starter\obj\Debug\Starter.csprojResolveAssemblyReference.cache
+C:\Users\Tygra\Desktop\Plugins\Starter\Starter\obj\Debug\Starter.csproj.CoreCompileInputs.cache
+C:\Users\Tygra\Desktop\Plugins\Starter\Starter\obj\Debug\Starter.dll
+C:\Users\Tygra\Desktop\Plugins\Starter\Starter\obj\Debug\Starter.pdb
