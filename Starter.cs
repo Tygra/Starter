@@ -224,6 +224,13 @@ namespace Starter
         }
         #endregion
 
+        #region Database things
+        private void addstartercd(string username, int commandid, int date, int expiration)
+        {
+            database.Query("INSERT INTO misc(User, CommandID, Date, Expiration) VALUES(@0, @1, @2, @3);", username, commandid, date, expiration);
+        }
+        #endregion
+
         #region Config reload
         public void Reloadcfg(CommandArgs args)
         {
