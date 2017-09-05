@@ -12,3 +12,11 @@ C:\Users\Tygra\Desktop\Plugins\Starter\Starter\obj\Debug\Starter.csprojResolveAs
 C:\Users\Tygra\Desktop\Plugins\Starter\Starter\obj\Debug\Starter.csproj.CoreCompileInputs.cache
 C:\Users\Tygra\Desktop\Plugins\Starter\Starter\obj\Debug\Starter.dll
 C:\Users\Tygra\Desktop\Plugins\Starter\Starter\obj\Debug\Starter.pdb
+C:\Users\tygra\Desktop\Plugins\Starter\bin\Debug\Starter.dll
+C:\Users\tygra\Desktop\Plugins\Starter\bin\Debug\Starter.pdb
+C:\Users\tygra\Desktop\Plugins\Starter\bin\Debug\HttpServer.dll
+C:\Users\tygra\Desktop\Plugins\Starter\bin\Debug\BCrypt.Net.dll
+C:\Users\tygra\Desktop\Plugins\Starter\obj\Debug\Starter.csprojResolveAssemblyReference.cache
+C:\Users\tygra\Desktop\Plugins\Starter\obj\Debug\Starter.csproj.CoreCompileInputs.cache
+C:\Users\tygra\Desktop\Plugins\Starter\obj\Debug\Starter.dll
+C:\Users\tygra\Desktop\Plugins\Starter\obj\Debug\Starter.pdb

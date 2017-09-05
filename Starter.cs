@@ -100,7 +100,7 @@ namespace Starter
             SqlTableCreator sqlcreator = new SqlTableCreator(database, database.GetSqlType() == SqlType.Sqlite ? (IQueryBuilder)new SqliteQueryCreator() : new MysqlQueryCreator());
             sqlcreator.EnsureTableStructure(new SqlTable("misc",
                 new SqlColumn("ID", MySqlDbType.Int32) { Primary = true, AutoIncrement = true },
-                new SqlColumn("User", MySqlDbType.Text) { Length = 30 },
+                new SqlColumn("Username", MySqlDbType.Text) { Length = 30 },
                 new SqlColumn("CommandID", MySqlDbType.Text),
                 new SqlColumn("Date", MySqlDbType.Int32),
                 new SqlColumn("Expiration", MySqlDbType.Int32)
@@ -192,7 +192,14 @@ namespace Starter
                 #region Mage
                 case "mage":
                     {
-
+                        if (args.Player.Group.HasPermission("geldar.starter.mage"))
+                        {
+                            if (!args.Player.Group.HasPermission("geldar.bypass.cd"))
+                            {
+                                var player = Playerlist[args.Player.Index];
+                                int currentdate = UnixTimestamp();
+                            }
+                        }
                     }
                     break;
                 #endregion
@@ -200,7 +207,14 @@ namespace Starter
                 #region Warrior
                 case "warrior":
                     {
-
+                        if (args.Player.Group.HasPermission("geldar.starter.warrior"))
+                        {
+                            if (!args.Player.Group.HasPermission("geldar.bypass.cd"))
+                            {
+                                var player = Playerlist[args.Player.Index];
+                                int currentdate = UnixTimestamp();
+                            }
+                        }
                     }
                     break;
                 #endregion
@@ -208,7 +222,29 @@ namespace Starter
                 #region Ranger
                 case "ranger":
                     {
+                        if (args.Player.Group.HasPermission("geldar.starter.ranger"))
+                        {
+                            if (!args.Player.Group.HasPermission("geldar.bypass.cd"))
+                            {
+                                var player = Playerlist[args.Player.Index];
+                                int currentdate = UnixTimestamp();
+                            }
+                        }
+                    }
+                    break;
+                #endregion
 
+                #region Summoner
+                case "summoner":
+                    {
+                        if (args.Player.Group.HasPermission("geldar.starter.summoenr"))
+                        {
+                            if (!args.Player.Group.HasPermission("geldar.bypass.cd"))
+                            {
+                                var player = Playerlist[args.Player.Index];
+                                int currentdate = UnixTimestamp();
+                            }
+                        }
                     }
                     break;
                 #endregion
@@ -227,7 +263,19 @@ namespace Starter
         #region Database things
         private void addstartercd(string username, int commandid, int date, int expiration)
         {
-            database.Query("INSERT INTO misc(User, CommandID, Date, Expiration) VALUES(@0, @1, @2, @3);", username, commandid, date, expiration);
+            database.Query("INSERT INTO misc(Username, CommandID, Date, Expiration) VALUES(@0, @1, @2, @3);", username, commandid, date, expiration);
+        }
+        private void checkstartercd(string username, int commandid)
+        {
+            QueryResult reader;
+            reader = database.QueryReader("SELECT FROM misc WHERE Username=@0 AND CommandID=@1;", username, commandid);
+            while (reader.Read())
+            {
+                var qusername = reader.Get<string>("Username");
+                var qcommandid = reader.Get<int>("CommandID");
+                var qdate = reader.Get<int>("Date");
+                var qexpiration = reader.Get<int>("Expiration");
+            }
         }
         #endregion
 
