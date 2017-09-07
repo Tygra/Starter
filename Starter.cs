@@ -212,7 +212,7 @@ namespace Starter
                                 {
                                     if (args.Player.InventorySlotAvailable)
                                     {
-                                        database.Query("INSERT INTO itemlevel(Username, CommandID, Date, Expiration) VALUES(@0, @1, @2, @3);", args.Player.Name, Config.contents.startercommandID, currentdate, expiration);
+                                        database.Query("INSERT INTO misc(Username, CommandID, Date, Expiration) VALUES(@0, @1, @2, @3);", args.Player.Name, Config.contents.startercommandID, currentdate, expiration);
                                         Item itemById = TShock.Utils.GetItemById(Config.contents.startermage);
                                         args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
                                         args.Player.SendSuccessMessage("{0} was put into your inventory.", Config.contents.startermage);
@@ -227,7 +227,7 @@ namespace Starter
                                 {
                                     if (args.Player.InventorySlotAvailable)
                                     {
-                                        database.Query("UPDATE itemlevel SET Date=@0 AND Expiration=@1 WHERE Username=@2 AND CommandID=@3;", currentdate, expiration, args.Player.Name, Config.contents.startercommandID);
+                                        database.Query("UPDATE misc SET Date=@0 AND Expiration=@1 WHERE Username=@2 AND CommandID=@3;", currentdate, expiration, args.Player.Name, Config.contents.startercommandID);
                                         Item itemById = TShock.Utils.GetItemById(Config.contents.startermage);
                                         args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
                                         args.Player.SendSuccessMessage("{0} was put into your inventory.", Config.contents.startermage);
@@ -239,12 +239,12 @@ namespace Starter
                                     }
                                 }
                             }
-                        }
-                        else
-                        {
-                            Item itemById = TShock.Utils.GetItemById(Config.contents.startermage);
-                            args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
-                            args.Player.SendSuccessMessage("{0} was put into your inventory.", Config.contents.startermage);
+                            else
+                            {
+                                Item itemById = TShock.Utils.GetItemById(Config.contents.startermage);
+                                args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
+                                args.Player.SendSuccessMessage("{0} was put into your inventory.", itemById.Name);
+                            }
                         }
                     }
                     break;
