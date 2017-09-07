@@ -187,7 +187,7 @@ namespace Starter
                 args.Player.SendErrorMessage("Invalid syntax. Use /starter mage, warrior or ranger");
                 return;
             }
-            switch (args.Parameters[0])
+            switch (args.Parameters[0].ToLower())
             {
                 #region Mage
                 case "mage":
@@ -201,11 +201,17 @@ namespace Starter
                                 int currentdate = UnixTimestamp();
                                 int expiration = currentdate + (int)time.TotalSeconds;
                                 List<string> startermage = new List<string>();
-                                using (var reader = database.QueryReader("SELECT * FROM misc WHERE Username=@0 AND CommandID=@1;", args.Player.Name, Config.contents.startercommandID))
+                                int readexpiration;
+                                QueryResult reader;
+                                reader = database.QueryReader("SELECT * FROM misc WHERE Username=@0 AND CommandID=@1;", args.Player.Name, Config.contents.startercommandID);
+                                if (reader.Read())
                                 {
-                                    while (reader.Read())
+                                    readexpiration = reader.Get<int>("Expiration");
+                                    startermage.Add(reader.Get<string>("Username"));
+                                    if (readexpiration > currentdate)
                                     {
-                                        startermage.Add(reader.Get<string>("Username"));
+                                        args.Player.SendErrorMessage("On cd");
+                                        break;
                                     }
                                 }
                                 if (startermage.Count < 1)
@@ -215,7 +221,7 @@ namespace Starter
                                         database.Query("INSERT INTO misc(Username, CommandID, Date, Expiration) VALUES(@0, @1, @2, @3);", args.Player.Name, Config.contents.startercommandID, currentdate, expiration);
                                         Item itemById = TShock.Utils.GetItemById(Config.contents.startermage);
                                         args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
-                                        args.Player.SendSuccessMessage("{0} was put into your inventory.", Config.contents.startermage);
+                                        args.Player.SendSuccessMessage("{0} was put into your inventory.", itemById.Name);
                                     }
                                     else
                                     {
