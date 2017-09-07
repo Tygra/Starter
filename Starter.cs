@@ -197,8 +197,54 @@ namespace Starter
                             if (!args.Player.Group.HasPermission("geldar.bypass.cd"))
                             {
                                 var player = Playerlist[args.Player.Index];
+                                TimeSpan time = ParseTimeSpan(Config.contents.startercooldown);
                                 int currentdate = UnixTimestamp();
+                                int expiration = currentdate + (int)time.TotalSeconds;
+                                List<string> startermage = new List<string>();
+                                using (var reader = database.QueryReader("SELECT * FROM misc WHERE Username=@0 AND CommandID=@1;", args.Player.Name, Config.contents.startercommandID))
+                                {
+                                    while (reader.Read())
+                                    {
+                                        startermage.Add(reader.Get<string>("Username"));
+                                    }
+                                }
+                                if (startermage.Count < 1)
+                                {
+                                    if (args.Player.InventorySlotAvailable)
+                                    {
+                                        database.Query("INSERT INTO itemlevel(Username, CommandID, Date, Expiration) VALUES(@0, @1, @2, @3);", args.Player.Name, Config.contents.startercommandID, currentdate, expiration);
+                                        Item itemById = TShock.Utils.GetItemById(Config.contents.startermage);
+                                        args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
+                                        args.Player.SendSuccessMessage("{0} was put into your inventory.", Config.contents.startermage);
+                                    }
+                                    else
+                                    {
+                                        args.Player.SendErrorMessage("Your inventory seems to be full. Free up one slot, and try again.");
+                                        return;
+                                    }
+                                }
+                                else
+                                {
+                                    if (args.Player.InventorySlotAvailable)
+                                    {
+                                        database.Query("UPDATE itemlevel SET Date=@0 AND Expiration=@1 WHERE Username=@2 AND CommandID=@3;", currentdate, expiration, args.Player.Name, Config.contents.startercommandID);
+                                        Item itemById = TShock.Utils.GetItemById(Config.contents.startermage);
+                                        args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
+                                        args.Player.SendSuccessMessage("{0} was put into your inventory.", Config.contents.startermage);
+                                    }
+                                    else
+                                    {
+                                        args.Player.SendErrorMessage("Your inventory seems to be full. Free up one slot, and try again.");
+                                        return;
+                                    }
+                                }
                             }
+                        }
+                        else
+                        {
+                            Item itemById = TShock.Utils.GetItemById(Config.contents.startermage);
+                            args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
+                            args.Player.SendSuccessMessage("{0} was put into your inventory.", Config.contents.startermage);
                         }
                     }
                     break;
@@ -212,8 +258,30 @@ namespace Starter
                             if (!args.Player.Group.HasPermission("geldar.bypass.cd"))
                             {
                                 var player = Playerlist[args.Player.Index];
+                                TimeSpan time = ParseTimeSpan(Config.contents.startercooldown);
                                 int currentdate = UnixTimestamp();
+                                int expiration = currentdate + (int)time.TotalSeconds;
+                                List<string> starterwarrior = new List<string>();
+                                using (var reader = database.QueryReader("SELECT * FROM misc WHERE Username=@0 AND CommandID=@1;", args.Player.Name, Config.contents.startercommandID))
+                                {
+                                    while (reader.Read())
+                                    {
+                                        starterwarrior.Add(reader.Get<string>("Username"));
+                                    }
+                                }
+                                if (starterwarrior.Count < 1)
+                                {
+                                    //insert mert nincs még az adatbázisban
+                                }
+                                else
+                                {
+                                    //update date és expiration mert már létezik a user
+                                }
                             }
+                        }
+                        else
+                        {
+                            //ha van permission
                         }
                     }
                     break;
@@ -227,8 +295,30 @@ namespace Starter
                             if (!args.Player.Group.HasPermission("geldar.bypass.cd"))
                             {
                                 var player = Playerlist[args.Player.Index];
+                                TimeSpan time = ParseTimeSpan(Config.contents.startercooldown);
                                 int currentdate = UnixTimestamp();
+                                int expiration = currentdate + (int)time.TotalSeconds;
+                                List<string> starterranger = new List<string>();
+                                using (var reader = database.QueryReader("SELECT * FROM misc WHERE Username=@0 AND CommandID=@1;", args.Player.Name, Config.contents.startercommandID))
+                                {
+                                    while (reader.Read())
+                                    {
+                                        starterranger.Add(reader.Get<string>("Username"));
+                                    }
+                                }
+                                if (starterranger.Count < 1)
+                                {
+                                    //insert mert nincs még az adatbázisban
+                                }
+                                else
+                                {
+                                    //update date és expiration mert már létezik a user
+                                }
                             }
+                        }
+                        else
+                        {
+                            //ha van permission
                         }
                     }
                     break;
@@ -242,8 +332,30 @@ namespace Starter
                             if (!args.Player.Group.HasPermission("geldar.bypass.cd"))
                             {
                                 var player = Playerlist[args.Player.Index];
+                                TimeSpan time = ParseTimeSpan(Config.contents.startercooldown);
                                 int currentdate = UnixTimestamp();
+                                int expiration = currentdate + (int)time.TotalSeconds;
+                                List<string> startersummoner = new List<string>();
+                                using (var reader = database.QueryReader("SELECT * FROM misc WHERE Username=@0 AND CommandID=@1;", args.Player.Name, Config.contents.startercommandID))
+                                {
+                                    while (reader.Read())
+                                    {
+                                        startersummoner.Add(reader.Get<string>("Username"));
+                                    }
+                                }
+                                if (startersummoner.Count < 1)
+                                {
+                                    //insert mert nincs még az adatbázisban
+                                }
+                                else
+                                {
+                                    //update date és expiration mert már létezik a user
+                                }
                             }
+                        }
+                        else
+                        {
+                            //ha van permission
                         }
                     }
                     break;
