@@ -55,7 +55,6 @@ namespace Starter
             Commands.ChatCommands.Add(new Command("geldar.admin", Reloadcfg, "starterreload"));
             Commands.ChatCommands.Add(new Command("geldar.admin", Starter, "starter"));
             Commands.ChatCommands.Add(new Command("geldar.admin", Timetest, "tt"));
-            Commands.ChatCommands.Add(new Command("geldar.admin", Timestest2, "tt2"));
             ServerApi.Hooks.GameInitialize.Register(this, OnInitialize);
             if (!Config.ReadConfig())
             {
@@ -224,8 +223,10 @@ namespace Starter
                                     startermage.Add(reader.Get<string>("Username"));
                                     if (readexpiration > currentdate)
                                     {
-                                        args.Player.SendErrorMessage("On cd");
-                                        break;
+                                        int cooldown = readexpiration - currentdate;
+                                        var ts = TimeSpan.FromSeconds(cooldown);
+                                        var hours = (int)(ts.TotalMinutes / 60);
+                                        args.Player.SendInfoMessage(string.Format("This command is on cooldown for: {0} hours , {1} minutes and {2} seconds.", hours, ts.Minutes, ts.Seconds));
                                     }
                                 }
                                 if (startermage.Count < 1)
@@ -287,26 +288,63 @@ namespace Starter
                                 int currentdate = UnixTimestamp();
                                 int expiration = currentdate + (int)time.TotalSeconds;
                                 List<string> starterwarrior = new List<string>();
-                                using (var reader = database.QueryReader("SELECT * FROM misc WHERE Username=@0 AND CommandID=@1;", args.Player.Name, Config.contents.startercommandID))
+                                int readexpiration;
+                                QueryResult reader;
+                                reader = database.QueryReader("SELECT * FROM misc WHERE Username=@0 AND CommandID=@1;", args.Player.Name, Config.contents.startercommandID);
+                                if (reader.Read())
                                 {
-                                    while (reader.Read())
+                                    readexpiration = reader.Get<int>("Expiration");
+                                    starterwarrior.Add(reader.Get<string>("Username"));
+                                    if (readexpiration > currentdate)
                                     {
-                                        starterwarrior.Add(reader.Get<string>("Username"));
+                                        int cooldown = readexpiration - currentdate;
+                                        var ts = TimeSpan.FromSeconds(cooldown);
+                                        var hours = (int)(ts.TotalMinutes / 60);
+                                        args.Player.SendInfoMessage(string.Format("This command is on cooldown for: {0} hours , {1} minutes and {2} seconds.", hours, ts.Minutes, ts.Seconds));
                                     }
                                 }
                                 if (starterwarrior.Count < 1)
                                 {
-                                    //insert mert nincs még az adatbázisban
+                                    if (args.Player.InventorySlotAvailable)
+                                    {
+                                        database.Query("INSERT INTO misc(Username, CommandID, Date, Expiration) VALUES(@0, @1, @2, @3);", args.Player.Name, Config.contents.startercommandID, currentdate, expiration);
+                                        Item itemById = TShock.Utils.GetItemById(Config.contents.starterwarrior);
+                                        args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
+                                        args.Player.SendSuccessMessage("{0} was put into your inventory.", itemById.Name);
+                                    }
+                                    else
+                                    {
+                                        args.Player.SendErrorMessage("Your inventory seems to be full. Free up one slot, and try again.");
+                                        return;
+                                    }
                                 }
                                 else
                                 {
-                                    //update date és expiration mert már létezik a user
+                                    if (args.Player.InventorySlotAvailable)
+                                    {
+                                        database.Query("UPDATE misc SET Date=@0, Expiration=@1 WHERE Username=@2 AND CommandID=@3;", currentdate, expiration, args.Player.Name, Config.contents.startercommandID);
+                                        Item itemById = TShock.Utils.GetItemById(Config.contents.starterwarrior);
+                                        args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
+                                        args.Player.SendSuccessMessage("{0} was put into your inventory.", itemById.Name);
+                                    }
+                                    else
+                                    {
+                                        args.Player.SendErrorMessage("Your inventory seems to be full. Free up one slot, and try again.");
+                                        return;
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                Item itemById = TShock.Utils.GetItemById(Config.contents.starterwarrior);
+                                args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
+                                args.Player.SendSuccessMessage("{0} was put into your inventory.", itemById.Name);
                             }
                         }
                         else
                         {
-                            //ha van permission
+                            args.Player.SendErrorMessage("You can only use this command if you are level 10, or below that");
+                            return;
                         }
                     }
                     break;
@@ -324,26 +362,63 @@ namespace Starter
                                 int currentdate = UnixTimestamp();
                                 int expiration = currentdate + (int)time.TotalSeconds;
                                 List<string> starterranger = new List<string>();
-                                using (var reader = database.QueryReader("SELECT * FROM misc WHERE Username=@0 AND CommandID=@1;", args.Player.Name, Config.contents.startercommandID))
+                                int readexpiration;
+                                QueryResult reader;
+                                reader = database.QueryReader("SELECT * FROM misc WHERE Username=@0 AND CommandID=@1;", args.Player.Name, Config.contents.startercommandID);
+                                if (reader.Read())
                                 {
-                                    while (reader.Read())
+                                    readexpiration = reader.Get<int>("Expiration");
+                                    starterranger.Add(reader.Get<string>("Username"));
+                                    if (readexpiration > currentdate)
                                     {
-                                        starterranger.Add(reader.Get<string>("Username"));
+                                        int cooldown = readexpiration - currentdate;
+                                        var ts = TimeSpan.FromSeconds(cooldown);
+                                        var hours = (int)(ts.TotalMinutes / 60);
+                                        args.Player.SendInfoMessage(string.Format("This command is on cooldown for: {0} hours , {1} minutes and {2} seconds.", hours, ts.Minutes, ts.Seconds));
                                     }
                                 }
                                 if (starterranger.Count < 1)
                                 {
-                                    //insert mert nincs még az adatbázisban
+                                    if (args.Player.InventorySlotAvailable)
+                                    {
+                                        database.Query("INSERT INTO misc(Username, CommandID, Date, Expiration) VALUES(@0, @1, @2, @3);", args.Player.Name, Config.contents.startercommandID, currentdate, expiration);
+                                        Item itemById = TShock.Utils.GetItemById(Config.contents.starterranger);
+                                        args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
+                                        args.Player.SendSuccessMessage("{0} was put into your inventory.", itemById.Name);
+                                    }
+                                    else
+                                    {
+                                        args.Player.SendErrorMessage("Your inventory seems to be full. Free up one slot, and try again.");
+                                        return;
+                                    }
                                 }
                                 else
                                 {
-                                    //update date és expiration mert már létezik a user
+                                    if (args.Player.InventorySlotAvailable)
+                                    {
+                                        database.Query("UPDATE misc SET Date=@0, Expiration=@1 WHERE Username=@2 AND CommandID=@3;", currentdate, expiration, args.Player.Name, Config.contents.startercommandID);
+                                        Item itemById = TShock.Utils.GetItemById(Config.contents.starterranger);
+                                        args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
+                                        args.Player.SendSuccessMessage("{0} was put into your inventory.", itemById.Name);
+                                    }
+                                    else
+                                    {
+                                        args.Player.SendErrorMessage("Your inventory seems to be full. Free up one slot, and try again.");
+                                        return;
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                Item itemById = TShock.Utils.GetItemById(Config.contents.starterranger);
+                                args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
+                                args.Player.SendSuccessMessage("{0} was put into your inventory.", itemById.Name);
                             }
                         }
                         else
                         {
-                            //ha van permission
+                            args.Player.SendErrorMessage("You can only use this command if you are level 10, or below that");
+                            return;
                         }
                     }
                     break;
@@ -352,7 +427,7 @@ namespace Starter
                 #region Summoner
                 case "summoner":
                     {
-                        if (args.Player.Group.HasPermission("geldar.starter.summoenr"))
+                        if (args.Player.Group.HasPermission("geldar.starter.summoner"))
                         {
                             if (!args.Player.Group.HasPermission("geldar.bypass.cd"))
                             {
@@ -361,26 +436,63 @@ namespace Starter
                                 int currentdate = UnixTimestamp();
                                 int expiration = currentdate + (int)time.TotalSeconds;
                                 List<string> startersummoner = new List<string>();
-                                using (var reader = database.QueryReader("SELECT * FROM misc WHERE Username=@0 AND CommandID=@1;", args.Player.Name, Config.contents.startercommandID))
+                                int readexpiration;
+                                QueryResult reader;
+                                reader = database.QueryReader("SELECT * FROM misc WHERE Username=@0 AND CommandID=@1;", args.Player.Name, Config.contents.startercommandID);
+                                if (reader.Read())
                                 {
-                                    while (reader.Read())
+                                    readexpiration = reader.Get<int>("Expiration");
+                                    startersummoner.Add(reader.Get<string>("Username"));
+                                    if (readexpiration > currentdate)
                                     {
-                                        startersummoner.Add(reader.Get<string>("Username"));
+                                        int cooldown = readexpiration - currentdate;
+                                        var ts = TimeSpan.FromSeconds(cooldown);
+                                        var hours = (int)(ts.TotalMinutes / 60);
+                                        args.Player.SendInfoMessage(string.Format("This command is on cooldown for: {0} hours , {1} minutes and {2} seconds.", hours, ts.Minutes, ts.Seconds));
                                     }
                                 }
                                 if (startersummoner.Count < 1)
                                 {
-                                    //insert mert nincs még az adatbázisban
+                                    if (args.Player.InventorySlotAvailable)
+                                    {
+                                        database.Query("INSERT INTO misc(Username, CommandID, Date, Expiration) VALUES(@0, @1, @2, @3);", args.Player.Name, Config.contents.startercommandID, currentdate, expiration);
+                                        Item itemById = TShock.Utils.GetItemById(Config.contents.startersummoner);
+                                        args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
+                                        args.Player.SendSuccessMessage("{0} was put into your inventory.", itemById.Name);
+                                    }
+                                    else
+                                    {
+                                        args.Player.SendErrorMessage("Your inventory seems to be full. Free up one slot, and try again.");
+                                        return;
+                                    }
                                 }
                                 else
                                 {
-                                    //update date és expiration mert már létezik a user
+                                    if (args.Player.InventorySlotAvailable)
+                                    {
+                                        database.Query("UPDATE misc SET Date=@0, Expiration=@1 WHERE Username=@2 AND CommandID=@3;", currentdate, expiration, args.Player.Name, Config.contents.startercommandID);
+                                        Item itemById = TShock.Utils.GetItemById(Config.contents.startersummoner);
+                                        args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
+                                        args.Player.SendSuccessMessage("{0} was put into your inventory.", itemById.Name);
+                                    }
+                                    else
+                                    {
+                                        args.Player.SendErrorMessage("Your inventory seems to be full. Free up one slot, and try again.");
+                                        return;
+                                    }
                                 }
+                            }
+                            else
+                            {
+                                Item itemById = TShock.Utils.GetItemById(Config.contents.startersummoner);
+                                args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
+                                args.Player.SendSuccessMessage("{0} was put into your inventory.", itemById.Name);
                             }
                         }
                         else
                         {
-                            //ha van permission
+                            args.Player.SendErrorMessage("You can only use this command if you are level 10, or below that");
+                            return;
                         }
                     }
                     break;

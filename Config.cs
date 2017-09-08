@@ -95,6 +95,7 @@ namespace Starter
             public int startermage = 3069;
             public int starterwarrior = 280;
             public int starterranger = 3492;
+            public int startersummoner = 1309;
             public string startercommandID = "1";
             public string startercooldown = "4h";
         }
