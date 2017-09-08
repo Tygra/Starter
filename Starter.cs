@@ -55,6 +55,7 @@ namespace Starter
             Commands.ChatCommands.Add(new Command("geldar.admin", Reloadcfg, "starterreload"));
             Commands.ChatCommands.Add(new Command("geldar.admin", Starter, "starter"));
             Commands.ChatCommands.Add(new Command("geldar.admin", Timetest, "tt"));
+            Commands.ChatCommands.Add(new Command("geldar.admin", Timestest2, "tt2"));
             ServerApi.Hooks.GameInitialize.Register(this, OnInitialize);
             if (!Config.ReadConfig())
             {
@@ -178,10 +179,11 @@ namespace Starter
         private void Timetest(CommandArgs args)
         {
             int currenttime = UnixTimestamp();
-            int expiration = 1504911600;
+            int expiration = 1504958400;
             int unixtime = expiration - currenttime;
             var ts = TimeSpan.FromSeconds(unixtime);
-            args.Player.SendInfoMessage(string.Format("{0} minutes and {1} seconds.", ts.Minutes, ts.Seconds));
+            var hours = (int)(ts.TotalMinutes / 60);
+            args.Player.SendInfoMessage(string.Format("{0} hours , {1} minutes and {2} seconds.", hours, ts.Minutes, ts.Seconds));
         }
         #endregion
 

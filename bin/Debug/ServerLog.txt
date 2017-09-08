@@ -1,0 +1,4 @@
+[09/08/17 16:07:16] [Server API] Verbose: TerrariaApi - Server v2.1.0.0 started.
+[09/08/17 16:07:16] [Server API] Verbose: 	Command line: "E:\Plugins\Starter\Starter\bin\Debug\TerrariaServer.exe" 
+[09/08/17 16:07:16] [Server API] Verbose: 	OS: Microsoft Windows NT 6.2.9200.0 (64bit: True)
+[09/08/17 16:07:16] [Server API] Verbose: 	Mono: False
