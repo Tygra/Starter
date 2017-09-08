@@ -54,6 +54,7 @@ namespace Starter
         {
             Commands.ChatCommands.Add(new Command("geldar.admin", Reloadcfg, "starterreload"));
             Commands.ChatCommands.Add(new Command("geldar.admin", Starter, "starter"));
+            Commands.ChatCommands.Add(new Command("geldar.admin", Timetest, "tt"));
             ServerApi.Hooks.GameInitialize.Register(this, OnInitialize);
             if (!Config.ReadConfig())
             {
@@ -173,6 +174,17 @@ namespace Starter
         }
         #endregion
 
+        #region Timetest
+        private void Timetest(CommandArgs args)
+        {
+            int currenttime = UnixTimestamp();
+            int expiration = 1504911600;
+            int unixtime = expiration - currenttime;
+            var ts = TimeSpan.FromSeconds(unixtime);
+            args.Player.SendInfoMessage(string.Format("{0} minutes and {1} seconds.", ts.Minutes, ts.Seconds));
+        }
+        #endregion
+
         #region Starter
         private void Starter(CommandArgs args)
         {
@@ -233,10 +245,10 @@ namespace Starter
                                 {
                                     if (args.Player.InventorySlotAvailable)
                                     {
-                                        database.Query("UPDATE misc SET Date=@0 AND Expiration=@1 WHERE Username=@2 AND CommandID=@3;", currentdate, expiration, args.Player.Name, Config.contents.startercommandID);
+                                        database.Query("UPDATE misc SET Date=@0, Expiration=@1 WHERE Username=@2 AND CommandID=@3;", currentdate, expiration, args.Player.Name, Config.contents.startercommandID);
                                         Item itemById = TShock.Utils.GetItemById(Config.contents.startermage);
                                         args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
-                                        args.Player.SendSuccessMessage("{0} was put into your inventory.", Config.contents.startermage);
+                                        args.Player.SendSuccessMessage("{0} was put into your inventory.", itemById.Name);
                                     }
                                     else
                                     {
@@ -251,6 +263,11 @@ namespace Starter
                                 args.Player.GiveItem(itemById.type, itemById.Name, itemById.width, itemById.height, 1, 0);
                                 args.Player.SendSuccessMessage("{0} was put into your inventory.", itemById.Name);
                             }
+                        }
+                        else
+                        {
+                            args.Player.SendErrorMessage("You can only use this command if you are level 10, or below that");
+                            return;
                         }
                     }
                     break;
